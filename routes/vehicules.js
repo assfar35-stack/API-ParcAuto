@@ -52,28 +52,28 @@ router.get("/:id", (req, res) => {
 
 // une route pour ajouter un vehicule
 router.post("/", (req, res) => {
-    // on recupere les donnees du vehicule a partir du corps de la requete
-    const { marque, modele, immatriculation} = req.body;
-    // on verifie que tous les champs sont presents
-    if (!marque || !modele || !immatriculation) {
-      return res.status(400).json({ error: "Tous les champs sont obligatoires" });
-    }
-    // on cree un nouvel objet vehicule avec un id unique
-    const nouveauVehicule = {
-      id: vehicules.length + 1,
-      marque,
-      modele,
-      immatriculation,
-      disponible: true,
-    };
-    // on ajoute le nouveau vehicule a la base de donnees
-    vehicules.push(nouveauVehicule);
-    res.status(201).json(nouveauVehicule);
-})
+  // on recupere les donnees du vehicule a partir du corps de la requete
+  const { marque, modele, immatriculation } = req.body;
+  // on verifie que tous les champs sont presents
+  if (!marque || !modele || !immatriculation) {
+    return res.status(400).json({ error: "Tous les champs sont obligatoires" });
+  }
+  // on cree un nouvel objet vehicule avec un id unique
+  const nouveauVehicule = {
+    id: vehicules.length + 1,
+    marque,
+    modele,
+    immatriculation,
+    disponible: true,
+  };
+  // on ajoute le nouveau vehicule a la base de donnees
+  vehicules.push(nouveauVehicule);
+  res.status(201).json(nouveauVehicule);
+});
 
 // une route pour modifier un vehicule
 router.patch("/:id", (req, res) => {
-    // on cherche le vehicule correspondant a l'id passe en parametre
+  // on cherche le vehicule correspondant a l'id passe en parametre
   const vehicule = vehicules.find((v) => v.id === Number(req.params.id));
   // si le vehicule n'existe pas, on retourne une erreur 404
   if (!vehicule) {
@@ -89,10 +89,9 @@ router.patch("/:id", (req, res) => {
   res.status(200).json(vehicule);
 });
 
-
 // une route pour supprimer un vehicule
 router.delete("/:id", (req, res) => {
-    // on cherche l'index du vehicule correspondant a l'id passe en parametre
+  // on cherche l'index du vehicule correspondant a l'id passe en parametre
   const index = vehicules.findIndex((v) => v.id === Number(req.params.id));
   // si le vehicule n'existe pas, on retourne une erreur 404
   if (index === -1) {
@@ -104,4 +103,3 @@ router.delete("/:id", (req, res) => {
 });
 // on exporte le routeur pour pouvoir l'utiliser dans server.js
 export default router;
-
