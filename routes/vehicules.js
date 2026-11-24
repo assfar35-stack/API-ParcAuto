@@ -70,3 +70,6 @@ router.post("/", (req, res) => {
     vehicules.push(nouveauVehicule);
     res.status(201).json(nouveauVehicule);
 })
+
+export default router;
+
