@@ -50,13 +50,15 @@ router.get("/:id", (req, res) => {
   res.status(200).json(vehicule);
 });
 
-
+// une route pour ajouter un vehicule
 router.post("/", (req, res) => {
+    // on recupere les donnees du vehicule a partir du corps de la requete
     const { marque, modele, immatriculation} = req.body;
+    // on verifie que tous les champs sont presents
     if (!marque || !modele || !immatriculation) {
       return res.status(400).json({ error: "Tous les champs sont obligatoires" });
     }
-
+    // on cree un nouvel objet vehicule avec un id unique
     const nouveauVehicule = {
       id: vehicules.length + 1,
       marque,
@@ -64,6 +66,7 @@ router.post("/", (req, res) => {
       immatriculation,
       disponible: true,
     };
+    // on ajoute le nouveau vehicule a la base de donnees
     vehicules.push(nouveauVehicule);
     res.status(201).json(nouveauVehicule);
 })
