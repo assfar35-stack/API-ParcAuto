@@ -11,8 +11,9 @@ let vehicules = [
 
 router.get("/", (req, res) => {
     if (req.query.disponible === "true") {
-        res.json(vehicules.filter(v => v.disponible));
+      return res.status(200).json(vehicules.filter(v => v.disponible));
     } else {
-        res.json(vehicules);
+        res.status(200).json(vehicules);
     }
 });
+
