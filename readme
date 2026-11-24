@@ -20,12 +20,12 @@ Le serveur démarre sur **http://localhost:7777**.
 ## Structure du projet
 
 ```
-agence-api/
+API ParcAuto/
 ├── server.js               # Point d'entrée : configuration d'Express et des middlewares
 ├── package.json            # "type": "module" (imports ES)
 ├── routes/
 │   └── vehicules.js        # Routeur Express : routes /vehicules
-└── middlewares/
+└── middleware/
     └── journal.js          # Affiche la méthode et l'URL de chaque requête
 ```
 
@@ -55,7 +55,7 @@ Exemple :
 
 | Méthode | URL               | Description                                                        | Réponses   |
 |---------|-------------------|--------------------------------------------------------------------|------------|
-| GET     | `/vehicules`      | Liste les véhicules (`?disponible=true` : seulement les disponibles) | 200        |
+| GET     | `/vehicules`      | Liste les véhicules (`?disponible=true`: seulement les disponibles)| 200        |
 | GET     | `/vehicules/:id`  | Renvoie un véhicule                                                | 200 · 404  |
 | POST    | `/vehicules`      | Crée un véhicule                                                   | 201 · 400  |
 | PATCH   | `/vehicules/:id`  | Modifie un ou plusieurs champs                                     | 200 · 404  |
@@ -97,11 +97,12 @@ Réponse `201` :
 
 Toutes les erreurs sont renvoyées en JSON :
 
-| Cas                                    | Code | Corps de la réponse                          |
-|----------------------------------------|------|----------------------------------------------|
-| Véhicule inexistant                    | 404  | `{ "erreur": "Véhicule introuvable" }`       |
-| Champ obligatoire manquant (POST)      | 400  | `{ "erreur": "Champs obligatoires manquants" }` |
-| Route inexistante                      | 404  | `{ "erreur": "Route introuvable" }`          |
+| Cas                                    | Code | Corps de la réponse                                |
+|----------------------------------------|------|----------------------------------------------------|
+| Véhicule introuvable (GET)             | 404  | `{ "error": "Vehicule non trouve" }`               |
+| Véhicule introuvable (PATCH/DELETE)    | 404  | `{ "erreur": "Véhicule introuvable" }`             |
+| Champ obligatoire manquant (POST)      | 400  | `{ "error": "Tous les champs sont obligatoires" }` |
+| Route inexistante                      | 404  | `{ "error": "Route non trouvee" }`                 |
 
 ## Middlewares
 
