@@ -73,21 +73,22 @@ router.post("/", (req, res) => {
 
 // une route pour modifier un vehicule
 router.patch("/:id", (req, res) => {
-  // on cherche le vehicule correspondant a l'id passe en parametre
-  const vehicule = vehicules.find((v) => v.id === number(req.params.id));
-    // si le vehicule n'existe pas, on retourne une erreur 404
-    if (!vehicule) {
-        return res.status(404).json({ error: "Vehicule non trouve" });
-    }
-    // on recupere les donnees a modifier a partir du corps de la requete
-    const { marque, modele, immatriculation, disponible } = req.body;
-    // on modifie seulement les champs presents dans la requete
-    if (marque) vehicule.marque = marque;
-    if (modele) vehicule.modele = modele;
-    if (immatriculation) vehicule.immatriculation = immatriculation;
-    if (disponible !== undefined) vehicule.disponible = disponible;
-    res.status(200).json(vehicule);
+    // on cherche le vehicule correspondant a l'id passe en parametre
+  const vehicule = vehicules.find((v) => v.id === Number(req.params.id));
+  // si le vehicule n'existe pas, on retourne une erreur 404
+  if (!vehicule) {
+    return res.status(404).json({ erreur: "Véhicule introuvable" });
+  }
+  // on recupere les donnees a modifier a partir du corps de la requete
+  const { marque, modele, immatriculation, disponible } = req.body ?? {};
+  if (marque !== undefined) vehicule.marque = marque;
+  if (modele !== undefined) vehicule.modele = modele;
+  if (immatriculation !== undefined) vehicule.immatriculation = immatriculation;
+  if (disponible !== undefined) vehicule.disponible = disponible;
+
+  res.status(200).json(vehicule);
 });
+
 
 // une route pour supprimer un vehicule
 router.delete("/:id", (req, res) => {
