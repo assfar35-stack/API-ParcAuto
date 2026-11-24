@@ -1,0 +1,117 @@
+# API de gestion des véhicules
+
+API REST construite avec **Node.js** et **Express** pour une agence de location de voitures. Les véhicules sont stockés dans un tableau en mémoire (pas de base de données) : les données reviennent à leur état initial à chaque redémarrage du serveur.
+
+## Prérequis
+
+- [Node.js](https://nodejs.org/) 18 ou plus récent
+- npm
+- [Postman](https://www.postman.com/) (pour tester les routes)
+
+## Installation et lancement
+
+```bash
+npm install
+npm start
+```
+
+Le serveur démarre sur **http://localhost:7777**.
+
+## Structure du projet
+
+```
+agence-api/
+├── server.js               # Point d'entrée : configuration d'Express et des middlewares
+├── package.json            # "type": "module" (imports ES)
+├── routes/
+│   └── vehicules.js        # Routeur Express : routes /vehicules
+└── middlewares/
+    └── journal.js          # Affiche la méthode et l'URL de chaque requête
+```
+
+## Ressource `vehicule`
+
+| Champ            | Type    | Description                                   |
+|------------------|---------|-----------------------------------------------|
+| `id`             | nombre  | Attribué par le serveur                       |
+| `marque`         | texte   | Obligatoire                                   |
+| `modele`         | texte   | Obligatoire                                   |
+| `immatriculation`| texte   | Obligatoire                                   |
+| `disponible`     | booléen | Vaut `true` à la création                     |
+
+Exemple :
+
+```json
+{
+  "id": 1,
+  "marque": "Dacia",
+  "modele": "Logan",
+  "immatriculation": "12345-A-6",
+  "disponible": true
+}
+```
+
+## Routes
+
+| Méthode | URL               | Description                                                        | Réponses   |
+|---------|-------------------|--------------------------------------------------------------------|------------|
+| GET     | `/vehicules`      | Liste les véhicules (`?disponible=true` : seulement les disponibles) | 200        |
+| GET     | `/vehicules/:id`  | Renvoie un véhicule                                                | 200 · 404  |
+| POST    | `/vehicules`      | Crée un véhicule                                                   | 201 · 400  |
+| PATCH   | `/vehicules/:id`  | Modifie un ou plusieurs champs                                     | 200 · 404  |
+| DELETE  | `/vehicules/:id`  | Supprime un véhicule                                               | 204 · 404  |
+
+### Exemples de requêtes
+
+**Créer un véhicule** : `POST /vehicules`
+
+```json
+{
+  "marque": "Fiat",
+  "modele": "Tipo",
+  "immatriculation": "11111-E-6"
+}
+```
+
+Réponse `201` :
+
+```json
+{
+  "id": 4,
+  "marque": "Fiat",
+  "modele": "Tipo",
+  "immatriculation": "11111-E-6",
+  "disponible": true
+}
+```
+
+**Modifier la disponibilité** : `PATCH /vehicules/2`
+
+```json
+{
+  "disponible": true
+}
+```
+
+## Erreurs
+
+Toutes les erreurs sont renvoyées en JSON :
+
+| Cas                                    | Code | Corps de la réponse                          |
+|----------------------------------------|------|----------------------------------------------|
+| Véhicule inexistant                    | 404  | `{ "erreur": "Véhicule introuvable" }`       |
+| Champ obligatoire manquant (POST)      | 400  | `{ "erreur": "Champs obligatoires manquants" }` |
+| Route inexistante                      | 404  | `{ "erreur": "Route introuvable" }`          |
+
+## Middlewares
+
+- **`journal`** : affiche dans le terminal la méthode et l'URL de chaque requête (ex. `GET /vehicules?disponible=true`).
+- **`express.json()`** : permet de lire le corps JSON des requêtes POST et PATCH.
+- **Middleware 404** : placé **après** les routes, il ne se déclenche que si aucune route n'a répondu.
+
+## Tests avec Postman
+
+1. Lancer le serveur avec `npm start`.
+2. Pour POST et PATCH : onglet **Body** → **raw** → **JSON**.
+3. Tester chaque route, y compris les cas d'erreur (id inconnu, champs manquants, URL inexistante).
+4. Vérifier dans le terminal que le journal affiche une ligne par requête.
