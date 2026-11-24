@@ -89,5 +89,19 @@ router.patch("/:id", (req, res) => {
     res.status(200).json(vehicule);
 });
 
+// une route pour supprimer un vehicule
+router.delete("/:id", (req, res) => {
+  // on cherche le vehicule correspondant a l'id passe en parametre
+  const index = vehicules.findIndex((v) => v.id === number(req.params.id));
+  // si le vehicule n'existe pas, on retourne une erreur 404
+  if (index === -1) {
+    return res.status(404).json({ error: "Vehicule non trouve" });
+  }
+  // on supprime le vehicule de la base de donnees
+  vehicules.splice(index, 1);
+  res.status(200).json({ message: "Vehicule supprime" });
+});
+
+// on exporte le routeur pour pouvoir l'utiliser dans server.js
 export default router;
 
