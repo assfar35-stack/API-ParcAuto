@@ -3,7 +3,7 @@ import express from 'express';
 // import the vehicules routes and the journal middleware
 import vehiculesRoutes from './routes/vehicules.js';
 // import the journal middleware
-import journal from './middlewares/journal.js';
+import journal from './middleware/journal.js';
 
 // create an express application    
 const app = express();
